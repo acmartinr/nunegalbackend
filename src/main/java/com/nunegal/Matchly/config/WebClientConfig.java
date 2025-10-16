@@ -21,7 +21,8 @@ public class WebClientConfig {
     public WebClient externalWebClient(
             @Value("${external.base-url}") String baseUrl,
             @Value("${external.connect-timeout-ms}") int connectTimeoutMs,
-            @Value("${external.response-timeout-ms}") int responseTimeoutMs
+            @Value("${external.response-timeout-ms}") int responseTimeoutMs,
+            @Value("${external.request-timeout-ms}") int requestTimeoutMs
     ) {
         ConnectionProvider pool = ConnectionProvider.builder("external-pool")
                 .maxConnections(200)
@@ -40,7 +41,7 @@ public class WebClientConfig {
         return WebClient.builder()
                 .baseUrl(baseUrl)
                 .clientConnector(new ReactorClientHttpConnector(http))
-                .filter((req, next) -> next.exchange(req).timeout(Duration.ofSeconds(8)))
+                .filter((req, next) -> next.exchange(req).timeout(Duration.ofSeconds(requestTimeoutMs)))
                 .defaultHeader("Accept", "application/json")
                 .build();
     }

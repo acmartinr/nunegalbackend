@@ -13,8 +13,8 @@ public class ResilienceConfig {
     @Bean
     public CircuitBreakerRegistry circuitBreakerRegistry() {
         CircuitBreakerConfig cb = CircuitBreakerConfig.custom()
-                .slowCallDurationThreshold(Duration.ofSeconds(7))  // o 8s si quieres ser más tolerante
-                .slowCallRateThreshold(90f)                        // tolera hasta 10% de lentas
+                .slowCallDurationThreshold(Duration.ofSeconds(7))
+                .slowCallRateThreshold(90f)
                 .failureRateThreshold(50f)
                 .waitDurationInOpenState(Duration.ofSeconds(10))
                 .permittedNumberOfCallsInHalfOpenState(10)
