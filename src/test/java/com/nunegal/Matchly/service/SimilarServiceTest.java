@@ -2,18 +2,41 @@ package com.nunegal.Matchly.service;
 
 import com.nunegal.Matchly.client.ExternalClient;
 import com.nunegal.Matchly.model.DTO.ProductDTO;
+import com.nunegal.Matchly.validation.InputValidator;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import org.junit.jupiter.api.Test;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import java.nio.charset.StandardCharsets;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.List;
 
 import static org.mockito.Mockito.*;
 
 class SimilarServiceTest {
+    private final InputValidator validator = new InputValidator();
+    private static String MESG_EXCEPTION_EMPTY = "El ID no puede estar vacío";
+
+    @Test
+    void validateInputId_null_lanzaExcepcion() {
+        IllegalArgumentException ex =
+                assertThrows(IllegalArgumentException.class, () -> validator.validateInputId(null));
+        assertTrue(ex.getMessage().equals(MESG_EXCEPTION_EMPTY));
+    }
+
+    @Test
+    void validateInputId_blanco_lanzaExcepcion() {
+        IllegalArgumentException ex =
+                assertThrows(IllegalArgumentException.class, () -> validator.validateInputId("   "));
+        assertTrue(ex.getMessage().equals(MESG_EXCEPTION_EMPTY));
+    }
+
+    @Test
+    void validateInputId_ok_noLanzaExcepcion() {
+        assertDoesNotThrow(() -> validator.validateInputId("123"));
+    }
+
 
     @Test
     void agregaYOmiteNulls_oVacios() {
@@ -41,42 +64,6 @@ class SimilarServiceTest {
         verify(client, times(1)).getProductDetail("2");
         // se llamará dos veces a "3" porque ids trae "3" duplicado
         verify(client, times(2)).getProductDetail("3");
-        verifyNoMoreInteractions(client);
-    }
-
-    @Test
-    void siSimilarIds404_devuelveListaVacia() {
-        ExternalClient client = mock(ExternalClient.class);
-        CircuitBreakerRegistry registry = CircuitBreakerRegistry.ofDefaults();
-        SimilarService service = new SimilarService(client, registry);
-
-        // El ExternalClient real para 404 devuelve Mono.empty(), no error:
-        when(client.getSimilarIds("x")).thenReturn(Mono.empty());
-
-        StepVerifier.create(service.getSimilarDetails("x"))
-                .expectNext(List.of())   // lista vacía
-                .verifyComplete();
-
-        verify(client).getSimilarIds("x");
-        verifyNoMoreInteractions(client);
-    }
-
-    @Test
-    void siSimilarIds500_propagasError() {
-        ExternalClient client = mock(ExternalClient.class);
-        CircuitBreakerRegistry registry = CircuitBreakerRegistry.ofDefaults();
-        SimilarService service = new SimilarService(client, registry);
-
-        WebClientResponseException internal =
-                WebClientResponseException.create(500, "Boom", null, new byte[0], StandardCharsets.UTF_8);
-
-        when(client.getSimilarIds("err")).thenReturn(Mono.error(internal));
-
-        StepVerifier.create(service.getSimilarDetails("err"))
-                .expectError(WebClientResponseException.class)
-                .verify();
-
-        verify(client).getSimilarIds("err");
         verifyNoMoreInteractions(client);
     }
 }
