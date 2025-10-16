@@ -1,4 +1,4 @@
-package com.nunegal.Matchly.client;
+package com.nunegal.Matchly.config;
 
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
