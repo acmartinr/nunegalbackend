@@ -62,4 +62,18 @@ Una vez iniciada, podrás ejecutar las llamadas de los endpoints en:
 
 👉 http://localhost:5000
 
+## 🚀 Ejecución de la aplicación release
+
+El archivo release se encuentra dentro de la carpeta:
+
+/release/Matchly-0.0.1-SNAPSHOT.jar
+
+🚀 Ejecución del .jar
+
+Para iniciar la aplicación, usa el siguiente comando:
+
+```bash
+java -jar release/mi-proyecto-0.0.1.jar
+```
+
 ---
