@@ -40,6 +40,7 @@ public class WebClientConfig {
         return WebClient.builder()
                 .baseUrl(baseUrl)
                 .clientConnector(new ReactorClientHttpConnector(http))
+                .filter((req, next) -> next.exchange(req).timeout(Duration.ofSeconds(8)))
                 .defaultHeader("Accept", "application/json")
                 .build();
     }

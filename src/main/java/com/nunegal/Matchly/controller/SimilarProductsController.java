@@ -6,12 +6,14 @@ import jakarta.validation.constraints.NotBlank;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/product")
 public class SimilarProductsController {
+
     private final SimilarService service;
 
     public SimilarProductsController(SimilarService service) {
@@ -19,15 +21,14 @@ public class SimilarProductsController {
     }
 
     @GetMapping("/{productId}/similar")
-    public ResponseEntity<List<ProductDTO>> similar(@PathVariable @NotBlank String productId) {
-        try {
-            List<ProductDTO> result = service.getSimilarDetails(productId);
-            return ResponseEntity.ok(result);
-        } catch (WebClientResponseException.NotFound e) {
-            return ResponseEntity.ok(List.of());
-        } catch (Exception e) {
-            return ResponseEntity.ok(List.of());
-        }
+    public Mono<ResponseEntity<List<ProductDTO>>> getSimilarProducts(@PathVariable @NotBlank String productId) {
+
+        return service.getSimilarDetails(productId)
+                // Si todo va bien → OK con la lista
+                .map(ResponseEntity::ok)
+                .onErrorResume(WebClientResponseException.NotFound.class,
+                        e -> Mono.just(ResponseEntity.ok(List.of())))
+                .onErrorResume(Exception.class,
+                        e -> Mono.just(ResponseEntity.internalServerError().body(List.of())));
     }
 }
-
