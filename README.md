@@ -2,7 +2,6 @@
 
 Este proyecto fue desarrollado con fines **técnicos y evaluativos**, como parte de un **test técnico** para demostrar
 buenas prácticas de desarrollo backend con **Spring Boot** y **programación reactiva**.
-
 ---
 
 ## 🚀 Descripción General
@@ -28,5 +27,39 @@ composición reactiva de datos.
 | **SLF4J + Logback** | Logging y trazabilidad |
 | **Jakarta Validation** | Validación de parámetros de entrada |
 | **JUnit / Mockito** | Testing unitario y de integración |
+
+### Guía rápida para ejecutar el proyecto con Maven Wrapper (`mvnw`)
+
+Este proyecto está **configurado para poder usar Maven Wrapper**, por lo que **no necesitas tener Maven instalado
+globalmente**.  
+Solo asegúrate de tener **Java JDK 17 o superior** y seguir los pasos siguientes.
+
+---
+
+### 🧩 1️⃣ Instalar dependencias y compilar el proyecto
+
+Ejecuta en la raíz del proyecto:
+
+```bash
+.\mvnw clean install
+```
+
+📦 2️⃣ Resolver dependencias
+
+```bash
+.\mvnw dependency:resolve
+```
+
+▶️ 3️⃣ Ejecutar la aplicación
+
+```bash
+.\mvnw spring-boot:run
+```
+
+Este comando levanta la aplicación Spring Boot con la configuración por defecto.
+
+Una vez iniciada, podrás ejecutar las llamadas de los endpoints en:
+
+👉 http://localhost:5000
 
 ---
