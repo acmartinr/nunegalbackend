@@ -10,6 +10,11 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
+/**
+ * Controlador REST que expone los endpoints relacionados con productos similares.
+ * <p>
+ * Devuelve la lista de productos similares asociados al producto especificado.
+ */
 @RestController
 @RequestMapping("/product")
 public class SimilarProductsController {

@@ -22,13 +22,18 @@ public class WebClientConfig {
             @Value("${external.base-url}") String baseUrl,
             @Value("${external.connect-timeout-ms}") int connectTimeoutMs,
             @Value("${external.response-timeout-ms}") int responseTimeoutMs,
-            @Value("${external.request-timeout-ms}") int requestTimeoutMs
+            @Value("${external.request-timeout-ms}") int requestTimeoutMs,
+            // pool
+            @Value("${external.pool.max-connections:200}") int maxConnections,
+            @Value("${external.pool.pending-acquire-timeout-ms:500}") long pendingAcquireTimeoutMs,
+            @Value("${external.pool.max-idle-seconds:15}") long maxIdleSeconds,
+            @Value("${external.pool.max-life-minutes:1}") long maxLifeMinutes
     ) {
         ConnectionProvider pool = ConnectionProvider.builder("external-pool")
-                .maxConnections(200)
-                .pendingAcquireTimeout(Duration.ofMillis(500))
-                .maxIdleTime(Duration.ofSeconds(15))
-                .maxLifeTime(Duration.ofMinutes(1))
+                .maxConnections(maxConnections)
+                .pendingAcquireTimeout(Duration.ofMillis(pendingAcquireTimeoutMs))
+                .maxIdleTime(Duration.ofSeconds(maxIdleSeconds))
+                .maxLifeTime(Duration.ofMinutes(maxLifeMinutes))
                 .build();
 
         HttpClient http = HttpClient.create(pool)
