@@ -1,2 +1,0 @@
-2025-10-16T00:06:02.115+02:00  INFO 17052 --- [Matchly] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
-2025-10-16T00:06:02.220+02:00  INFO 17052 --- [Matchly] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
